@@ -64,7 +64,8 @@ def login(request):
 
         if user is not None:
             auth.login(request,user)
-            return redirect("home")
+            messages.success(request,'Has iniciado sesión exitosamente')
+            return redirect("dashboard")
         
         else:
             messages.error(request, 'Importante: Las credenciales son incorrectas')
@@ -96,3 +97,9 @@ def activate(request, uidb64, token):
     else:
         messages.error(request, 'La activación es invalida')
         return redirect('register')
+    
+
+@login_required(login_url='login')
+def dashboard(request):
+    return render(request, 'accounts/dashboard.html')
+
