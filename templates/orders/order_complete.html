@@ -24,7 +24,7 @@
                         <!-- Start .row -->
                         <div class="col-lg-6">
                             <!-- col-lg-6 start here -->
-                            <div class="invoice-logo"><img src="% static '/images/logo01.png' %" alt="Invoice logo" style="max-height: 40px;"></div>
+                            <div class="invoice-logo"><img src="% static '/images/neuraprint_logo_v2.png' %" alt="Invoice logo" style="max-height: 40px;"></div>
                         </div>
                         <!-- col-lg-6 end here -->
                         <div class="col-lg-6">
@@ -80,7 +80,7 @@
                                                     </p>
                                                 </td>
                                                 <td class="text-center"> {{ item.quantity }} </td>
-                                                <td class="text-center"> {{ item.product.price }} USD</td>
+                                                <td class="text-center"> {{ item.product.price }} EUR</td>
                                             </tr>
 >                                           {% endfor %}
                                         </tbody>
@@ -91,12 +91,12 @@
                                             </tr>
                                             <tr>
                                                 <th colspan="2" class="text-right">Tax:</th>
-                                                <th class="text-center">$ {{ order.tax }} USD</th>
+                                                <th class="text-center">$ {{ order.tax }} EUR</th>
                                             </tr>
                                             
                                             <tr>
                                                 <th colspan="2" class="text-right">Grand Total:</th>
-                                                <th class="text-center">$ {{order.order_total}} USD</th>
+                                                <th class="text-center">$ {{order.order_total}} EUR</th>
                                             </tr>
                                         </tfoot>
                                     </table>
