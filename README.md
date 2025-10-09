@@ -1,5 +1,7 @@
 Proyecto en DJango version 
-
+-------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------
 Proceso de migración de sqlite a postgress contenerizado
 
 0.- Situarse en carpeta eccomerce  y cargar entorno virtual :
@@ -56,10 +58,67 @@ docker-compose -f web.yml -f nginx.yml up --build -d
 
 bd:
 docker compose up -d
-
-
-
+-------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------
 
 ANOTACIONES IMPORTANTES:
 *Cuando se modifican elementos de la carpeta static hay que hacer un collecstatic para que se actualice los cambios (seria ideal ver si se puede meter como comando inicial en el docker compose para que cada vez que se levante haga dicha actualización por si hay algun cambio pendiente):
 python manage.py collectstatic -->  Ojo! que es interactivo, hay que escribir 'yes' para confirmar
+-------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------
+Instrucciones iniciar aplicacion dockerizada en local sin django dockerizado:
+
+cd postgres
+
+docker compose -f docker-compose-dev.yml --env-file .env-dev up -d
+
+cd..
+
+cd eccomerce
+(cambiar en el .env la variable a DB_HOST='127.0.0.1')
+docker-compose -f web.yml -f nginx.yml up --build -d
+
+cd 
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+Instrucciones iniciar aplicacion dockerizada en local CON django dockerizado:
+
+cd postgres
+(cambiar en el .env la variable a DB_HOST=db)
+docker compose -f docker-compose-prod.yml --env-file .env-prod up -d
+
+cd..
+
+cd eccomerce
+
+docker-compose -f web.yml -f nginx.yml up --build -d
+
+cd 
+-------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Anulado de Registro de usuario:
+
+-accounts --> urls.py comentada linea de URL
+-forgotPassWord.html-->comentada linea: {#         <p class="text-center mt-4">No tienes una cuenta? <a href="{% url 'register' %}">Registrate</a></p> #}
+-login.html-->comentada linea:  {#     <p class="text-center mt-4">No tienes una cuenta? <a href="{% url 'register' %}">Registrate</a></p> #}
+-resetPassword.html-->comentada linea: {# <p class="text-center mt-4">No tienes una cuenta? <a href="{% url 'register' %}">Registrate</a></p> #}
+-navbar-->comentada linea: {# href="{% url 'register' %}"> Registrar</a> #}
+
+
+
+Comentada funcion register de accounts/views.py y sustituida por esta:
+
+def register(request):
+    """
+    Esta función deshabilita el registro de nuevos usuarios
+    y redirige a la página de inicio de sesión.
+    """
+    messages.info(request, 'El registro de nuevos usuarios no está permitido en este momento.')
+    return redirect('login') # Puedes redirigir a 'login' o a la página principal de tu tienda
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
