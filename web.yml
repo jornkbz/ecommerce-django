@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      args:
+        # Pasa todos los valores del .env como argumentos al build
+        - SECRET_KEY=${SECRET_KEY}
+        - DEBUG=${DEBUG}
+        - DB_ENGINE=${DB_ENGINE}
+        - DB_NAME=${DB_NAME}
+        - DB_USER=${DB_USER}
+        - DB_PASSWORD=${DB_PASSWORD}
+        - DB_HOST=${DB_HOST}
+        - DB_PORT=${DB_PORT}
+        - EMAIL_HOST=${EMAIL_HOST}
+        - EMAIL_PORT=${EMAIL_PORT}
+        - DEFAULT_FROM_EMAIL=${DEFAULT_FROM_EMAIL}
+        - EMAIL_HOST_USER=${EMAIL_HOST_USER}
+        - EMAIL_HOST_PASSWORD=${EMAIL_HOST_PASSWORD}
+          
+    volumes:
+      - ./media:/app/media
+      - static_volume:/app/static
+    env_file:
+      - .env
+    
+#    ports:
+#      - "8000:8000"
+    networks:
+      - neura_django
+
+volumes:
+#  media_volume:
+  static_volume:
+
+networks:
+  neura_django:
+    external: true
+
+secrets:
+  django_env:
+    file: .env

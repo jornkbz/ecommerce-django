@@ -164,6 +164,12 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
+#dumps para cambio motor bd
+initial_data.json
+
+#solucion fallo temporal:
+Solucionar_error_imagen_por_defecto
+
 # PyCharm
 #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
 #  be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore

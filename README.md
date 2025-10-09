@@ -46,3 +46,20 @@ winpty python manage.py createsuperuser
 
 8.- Arrancar y verificar que la app de django funciona correctamente:
 python manage.py runserver
+
+
+
+
+Levantar proyecto dockerizado:
+web + nginx
+docker-compose -f web.yml -f nginx.yml up --build -d
+
+bd:
+docker compose up -d
+
+
+
+
+ANOTACIONES IMPORTANTES:
+*Cuando se modifican elementos de la carpeta static hay que hacer un collecstatic para que se actualice los cambios (seria ideal ver si se puede meter como comando inicial en el docker compose para que cada vez que se levante haga dicha actualización por si hay algun cambio pendiente):
+python manage.py collectstatic -->  Ojo! que es interactivo, hay que escribir 'yes' para confirmar
