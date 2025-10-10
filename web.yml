@@ -12,7 +12,7 @@ services:
 
     # Los volúmenes y el archivo .env se mantienen igual
     volumes:
-      - .media:/app/media
+      - ./media:/app/media
       - static_volume:/app/static
     env_file:
       - .env
