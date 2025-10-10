@@ -1,35 +1,27 @@
+# web.yml (Versión para el servidor/producción)
+
 version: '3.8'
 
 services:
   web:
-    build:
-      context: .
-      args:
-        # Pasa todos los valores del .env como argumentos al build
-        - SECRET_KEY=${SECRET_KEY}
-        - DEBUG=${DEBUG}
-        - DB_ENGINE=${DB_ENGINE}
-        - DB_NAME=${DB_NAME}
-        - DB_USER=${DB_USER}
-        - DB_PASSWORD=${DB_PASSWORD}
-        - DB_HOST=${DB_HOST}
-        - DB_PORT=${DB_PORT}
-        - EMAIL_HOST=${EMAIL_HOST}
-        - EMAIL_PORT=${EMAIL_PORT}
-        - DEFAULT_FROM_EMAIL=${DEFAULT_FROM_EMAIL}
-        - EMAIL_HOST_USER=${EMAIL_HOST_USER}
-        - EMAIL_HOST_PASSWORD=${EMAIL_HOST_PASSWORD}
-          
+    # Le decimos a Docker que use esta imagen específica del registro
+    image: ghcr.io/jornkbz/ecommerce-django:latest
+
+    # Política de "pull": asegura que siempre intente descargar la última versión
+    pull_policy: always
+
+    # Los volúmenes y el archivo .env se mantienen igual
     volumes:
-      - ./media:/app/media
+      - .media:/app/media
       - static_volume:/app/static
     env_file:
       - .env
-    
-#    ports:
-#      - "8000:8000"
+
+    # La configuración de red y dependencias también se mantiene
     networks:
       - neura_django
+#    depends_on:
+#      - db
 
 volumes:
 #  media_volume:
@@ -38,7 +30,3 @@ volumes:
 networks:
   neura_django:
     external: true
-
-secrets:
-  django_env:
-    file: .env

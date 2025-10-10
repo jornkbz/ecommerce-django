@@ -6,3 +6,5 @@
 db.sqlite3
 __pycache__/
 *.pyc
+initial_data.json
+env

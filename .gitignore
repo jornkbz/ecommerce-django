@@ -170,6 +170,9 @@ initial_data.json
 #solucion fallo temporal:
 Solucionar_error_imagen_por_defecto
 
+#para reestablecer estructura (migracion) tras cambio motor de BD
+initial_data.json
+
 # PyCharm
 #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
 #  be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
