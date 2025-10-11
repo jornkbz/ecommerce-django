@@ -23,9 +23,13 @@ services:
 #    depends_on:
 #      - db
 
-volumes:
+#volumes:
 #  media_volume:
+#  static_volume:
+volumes:
+  # Definición principal del volumen
   static_volume:
+    name: shared_static_volume # <-- Le damos un nombre explícito y global
 
 networks:
   neura_django:
