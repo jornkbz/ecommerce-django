@@ -28,6 +28,7 @@ DEBUG = config('DEBUG', cast=bool, default=True)
 ALLOWED_HOSTS = ['neuraprint3d.com','www.neuraprint3d.com']
 #CSRF_TRUSTED_ORIGINS = [config('CSRF_TRUSTED_ORIGINS')]
 CSRF_TRUSTED_ORIGINS = ['neuraprint3d.com','www.neuraprint3d.com']
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # Application definition
 
 INSTALLED_APPS = [
