@@ -26,8 +26,8 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', cast=bool, default=True)
 
 ALLOWED_HOSTS = ['neuraprint3d.com']
-
-
+#CSRF_TRUSTED_ORIGINS = [config('CSRF_TRUSTED_ORIGINS')]
+CSRF_TRUSTED_ORIGINS = ['neuraprint3d.com']
 # Application definition
 
 INSTALLED_APPS = [
