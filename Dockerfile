@@ -4,7 +4,7 @@ FROM python:3.11-slim-bullseye AS builder
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-# Declaramos TODOS los argumentos que vamos a recibir
+# Declaramos todos los argumentos que vamos a recibir
 ARG SECRET_KEY
 ARG DEBUG
 ARG DB_ENGINE
