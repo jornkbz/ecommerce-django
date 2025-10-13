@@ -15,7 +15,7 @@ jobs:
       packages: write
 
     steps:
-      # 1. Descarga el código del repositorio
+      # 1. Descarga el codigo del repositorio
       - name: Checkout del repositorio
         uses: actions/checkout@v4
 
