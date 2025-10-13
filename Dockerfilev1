@@ -32,7 +32,7 @@ COPY requirements.txt .
 RUN pip wheel --no-cache-dir --no-deps --wheel-dir /app/wheels -r requirements.txt
 
 
-# --- Fase 2: Entorno de producción ---
+# --- Fase 2: Entorno de produccion ---
 FROM python:3.11-slim-bullseye AS final
 
 # Declaramos el argumento que vamos a recibir desde docker-compose.yml
