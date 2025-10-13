@@ -56,6 +56,7 @@ jobs:
           host: ${{ secrets.IONOS_HOST }}
           username: ${{ secrets.IONOS_USERNAME }}
           key: ${{ secrets.IONOS_SSH_KEY }}
+          port: ${{ secrets.IONOS_SSH_PORT }} 
           script: |
             # Define las rutas a todos los archivos .yml
             DB_YML="/srv/docker/postgres/db.yml"
