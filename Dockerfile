@@ -1,6 +1,4 @@
-# Dockerfile
-
-# --- Fase 1: Entorno de construcción ---
+# --- Fase 1: Entorno de construcción (Usa los secretos y luego se descarta) ---
 FROM python:3.11-slim-bullseye AS builder
 
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -20,7 +18,6 @@ ARG EMAIL_PORT
 ARG DEFAULT_FROM_EMAIL
 ARG EMAIL_HOST_USER
 ARG EMAIL_HOST_PASSWORD
-ARG EMAIL_USE_TLS
 
 WORKDIR /app
 
@@ -29,32 +26,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libpq-dev
 
 COPY requirements.txt .
-RUN pip wheel --no-cache-dir --no-deps --wheel-dir /app/wheels -r requirements.txt
-
-
-# --- Fase 2: Entorno de producción ---
-FROM python:3.11-slim-bullseye AS final
-
-# Declaramos el argumento que vamos a recibir desde docker-compose.yml
-ARG SECRET_KEY
-
-RUN groupadd -r django && useradd -r -g django django
-
-WORKDIR /app
-RUN mkdir -p /app/static && \
-    mkdir -p /app/media && \
-    chown -R django:django /app
-
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    libpq5 \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
-
-COPY --from=builder /app/wheels /wheels
-RUN pip install --no-cache /wheels/*
+RUN pip install -r requirements.txt
 
 COPY . .
 
-# Hacemos que los argumentos estén disponibles como variables de entorno
+# Hacemos que los argumentos estén disponibles como variables de entorno SOLO en esta fase
 ENV SECRET_KEY=$SECRET_KEY
 ENV DEBUG=$DEBUG
 ENV DB_ENGINE=$DB_ENGINE
@@ -69,8 +45,32 @@ ENV DEFAULT_FROM_EMAIL=$DEFAULT_FROM_EMAIL
 ENV EMAIL_HOST_USER=$EMAIL_HOST_USER
 ENV EMAIL_HOST_PASSWORD=$EMAIL_HOST_PASSWORD
 
-# Ahora el comando collectstatic es simple y funcionará.
+# Ejecutamos collectstatic aquí, donde tenemos acceso a los secretos
 RUN python manage.py collectstatic --noinput
+
+
+# --- Fase 2: Entorno de producción (Limpio, sin secretos) ---
+FROM python:3.11-slim-bullseye AS final
+
+RUN groupadd -r django && useradd -r -g django django
+
+WORKDIR /app
+RUN mkdir -p /app/static && \
+    mkdir -p /app/media && \
+    chown -R django:django /app
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libpq5 \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
+RUN pip install --no-deps -r requirements.txt
+
+# Copiamos el código de la aplicación
+COPY . .
+
+# Copiamos los archivos estáticos ya recolectados de la fase anterior
+COPY --from=builder /app/static /app/static
 
 USER django
 
