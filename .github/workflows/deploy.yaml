@@ -65,7 +65,7 @@ jobs:
 
             # Actualiza el código de configuración en el servidor
             cd /srv/docker/ecommerce-django
-            git pull
+            # git pull
 
             # Inicia sesión en GHCR para poder descargar la imagen
             docker login ghcr.io -u ${{ github.repository_owner }} -p ${{ secrets.GITHUB_TOKEN }}
