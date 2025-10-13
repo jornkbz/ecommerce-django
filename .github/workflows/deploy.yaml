@@ -60,7 +60,7 @@ jobs:
             # Define las rutas a todos los archivos .yml
             DB_YML="/srv/docker/postgres/db.yml"
             WEB_YML="/srv/docker/ecommerce-django/web.yml"
-            NGINX_YML="/srv/docker/nginx-proxy/nginx.yml"
+            NGINX_YML="/srv/docker/nginx/nginx.yml"
 
             # Actualiza el código de configuración en el servidor
             cd /srv/docker/ecommerce-django
