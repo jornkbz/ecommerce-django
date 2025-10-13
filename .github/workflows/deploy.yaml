@@ -1,0 +1,79 @@
+# .github/workflows/deploy.yml
+
+name: Despliegue Continuo en IONOS
+
+# Se activa cada vez que haces un push a la rama "main"
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-push-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      # 1. Descarga el código del repositorio
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+
+      # 2. Inicia sesión en GitHub Container Registry
+      - name: Iniciar sesión en GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # 3. Construye y sube la imagen de Docker
+      - name: Construir y subir la imagen de Docker
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:latest
+          build-args: |
+            SECRET_KEY=${{ secrets.SECRET_KEY }}
+            DEBUG=${{ secrets.DEBUG }}
+            DB_ENGINE=${{ secrets.DB_ENGINE }}
+            DB_NAME=${{ secrets.DB_NAME }}
+            DB_USER=${{ secrets.DB_USER }}
+            DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+            DB_HOST=${{ secrets.DB_HOST }}
+            DB_PORT=${{ secrets.DB_PORT }}
+            EMAIL_HOST=${{ secrets.EMAIL_HOST }}
+            EMAIL_PORT=${{ secrets.EMAIL_PORT }}
+            DEFAULT_FROM_EMAIL=${{ secrets.DEFAULT_FROM_EMAIL }}
+            EMAIL_HOST_USER=${{ secrets.EMAIL_HOST_USER }}
+            EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }}
+
+      # 4. Despliega la nueva imagen en el servidor IONOS
+      - name: Desplegar en IONOS por SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.IONOS_HOST }}
+          username: ${{ secrets.IONOS_USERNAME }}
+          key: ${{ secrets.IONOS_SSH_KEY }}
+          script: |
+            # Define las rutas a todos los archivos .yml
+            DB_YML="/srv/docker/postgres/db.yml"
+            WEB_YML="/srv/docker/ecommerce-django/web.yml"
+            NGINX_YML="/srv/docker/nginx-proxy/nginx.yml"
+
+            # Actualiza el código de configuración en el servidor
+            cd /srv/docker/ecommerce-django
+            git pull
+
+            # Inicia sesión en GHCR para poder descargar la imagen
+            docker login ghcr.io -u ${{ github.repository_owner }} -p ${{ secrets.GITHUB_TOKEN }}
+
+            # Descarga la nueva versión de la imagen de la aplicación
+            docker compose -f $DB_YML -f $WEB_YML -f $NGINX_YML pull web
+
+            # Vuelve a levantar los contenedores. Docker solo recreará el de la app.
+            docker compose -f $DB_YML -f $WEB_YML -f $NGINX_YML up -d --force-recreate
+
+            # Limpia las imágenes de Docker antiguas que ya no se usan
+            docker image prune -af
