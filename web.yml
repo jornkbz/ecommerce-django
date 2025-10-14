@@ -6,13 +6,13 @@ services:
   web:
     # Le decimos a Docker que use esta imagen específica del registro
     image: ghcr.io/jornkbz/ecommerce-django:latest
-
+    restart: always
     # Política de "pull": asegura que siempre intente descargar la última versión
     pull_policy: always
 
     # Los volúmenes y el archivo .env se mantienen igual
     volumes:
-      - ./media:/app/media
+      - /srv/docker/ecommerce-django/media:/app/media
       - static_volume:/app/static
     env_file:
       - .env
@@ -23,13 +23,20 @@ services:
 #    depends_on:
 #      - db
 
+
+volumes:
+  # Le decimos a Docker que este volumen es "externo" y que ya existe
+  static_volume:
+    name: shared_static_volume # <-- Usa el mismo nombre explícito
+
+
+
+
 #volumes:
 #  media_volume:
 #  static_volume:
-volumes:
-  # Definición principal del volumen
-  static_volume:
-    name: shared_static_volume # <-- Le damos un nombre explícito y global
+
+
 
 networks:
   neura_django:
