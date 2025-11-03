@@ -73,18 +73,24 @@ jobs:
             # Descarga la nueva versión de la imagen de la aplicación
             #docker compose --project-name ecommerce-django -f $DB_YML -f $WEB_YML -f $NGINX_YML pull web
 
-            # Descarga la nueva versión de la imagen de la aplicación
-            docker compose -f $DB_YML -f $WEB_YML -f $NGINX_YML pull web
+            # MENOS SEGURO Descarga la nueva versión de la imagen de la aplicación
+            #docker compose -f $DB_YML -f $WEB_YML -f $NGINX_YML pull web
 
 
-            # Reinicia solo los contenedores de la app, dejando la BD intacta
-            docker compose -f $DB_YML up -d
+            # MENOS SEGURO Reinicia solo los contenedores de la app, dejando la BD intacta
+            #docker compose -f $DB_YML up -d
 
-            # Reinicia solo los contenedores de la app y el proxy, dejando la BD intacta
-            docker compose -f $WEB_YML up -d --force-recreate web  # <-- OPTIMIZADO
+            # MENOS SEGURO Reinicia solo los contenedores de la app y el proxy, dejando la BD intacta
+            #docker compose -f $WEB_YML up -d --force-recreate web  # <-- OPTIMIZADO
 
-            # Reinicia solo los contenedores de la app y el proxy, dejando la BD intacta
-            docker compose -f $NGINX_YML up -d --force-recreate nginx # <-- OPTIMIZADO
-
+            # MENOS SEGURO Reinicia solo los contenedores de la app y el proxy, dejando la BD intacta
+            #docker compose -f $NGINX_YML up -d --force-recreate nginx # <-- OPTIMIZADO
+            
+            # Este único comando unificado MAS SEGURO
+            COMPOSE_COMMAND="docker compose --project-name ecommerce-django -f $DB_YML -f $WEB_YML -f $NGINX_YML"
+            $COMPOSE_COMMAND pull web
+            $COMPOSE_COMMAND up -d --force-recreate web ngin
+            
+            
             # Limpia las imágenes de Docker antiguas que ya no se usan
             docker image prune -af
