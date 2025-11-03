@@ -89,7 +89,7 @@ jobs:
             # Este único comando unificado MAS SEGURO
             COMPOSE_COMMAND="docker compose --project-name ecommerce-django -f $DB_YML -f $WEB_YML -f $NGINX_YML"
             $COMPOSE_COMMAND pull web
-            $COMPOSE_COMMAND up -d --force-recreate web ngin
+            $COMPOSE_COMMAND up -d --force-recreate web nginx
             
             
             # Limpia las imágenes de Docker antiguas que ya no se usan
