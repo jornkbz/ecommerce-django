@@ -198,7 +198,8 @@ CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
         # Apuntar al nombre del servicio 'redis' que definiremos en el db.yml
-        "LOCATION": "redis://redis:6379/1",
+#        "LOCATION": "redis://redis:6379/1",
+        "LOCATION": "redis://postgres-redis-1:6379/1",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
