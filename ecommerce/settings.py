@@ -200,7 +200,6 @@ CACHES = {
         # Apuntar al nombre del servicio 'redis' que definiremos en el db.yml
         "LOCATION": "redis://redis:6379/1",
 #        "LOCATION": "redis://127.0.0.1:6379/1",
-        "HOST": "db",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }

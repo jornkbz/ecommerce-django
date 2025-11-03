@@ -197,3 +197,6 @@ def register(request):
 
 
 -------------------------------------------------------------------------------------------------------------------------------------------------
+
+Levantar como proyecto en servidor(opción más recomendable):
+docker compose   --project-name ecommerce-django   -f /srv/docker/postgres/db.yml   -f /srv/docker/ecommerce-django/web.yml   -f /srv/docker/nginx-proxy/nginx.yml   up -d
